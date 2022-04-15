@@ -1,1 +1,4 @@
 *.out
+gnlTester/
+
+a.out.dSYM/Contents/Info.plist
