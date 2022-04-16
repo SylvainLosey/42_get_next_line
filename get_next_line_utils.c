@@ -6,12 +6,11 @@
 /*   By: sylvain <sylvain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 15:32:43 by sylvain           #+#    #+#             */
-/*   Updated: 2022/04/16 18:09:41 by sylvain          ###   ########.fr       */
+/*   Updated: 2022/04/16 18:25:57 by sylvain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 size_t	strlen_until_char(const char *s, const char c)
 {
@@ -22,7 +21,7 @@ size_t	strlen_until_char(const char *s, const char c)
 	{
 		while (s[i])
 			i++;
-	} 
+	}
 	else
 	{
 		while (s[i] && s[i] != c)
@@ -42,7 +41,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	len1 = strlen_until_char(s1, 0);
 	len2 = strlen_until_char(s2, 0);
-	str = (char*)malloc(sizeof(char) * (len1 + len2 + 1));
+	str = (char *) malloc(sizeof(char) * (len1 + len2 + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -61,7 +60,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
-	unsigned int i;
+	unsigned int	i;
 
 	i = 0;
 	while (src[i] != '\0' && i < n)
@@ -74,16 +73,24 @@ char	*ft_strncpy(char *dest, char *src, unsigned int n)
 	return (dest);
 }
 
-
-void	*ft_memset(void *b, int c, size_t len)
+void	ft_bzero(void *b, size_t n)
 {
-	size_t	i;
+	unsigned char	*dest;
+	size_t			i;
 
+	dest = b;
 	i = 0;
-	while (i < len)
-	{
-		*(unsigned char *)(b + i) = (unsigned char)c;
-		i++;
-	}
-	return (b);
+	while (i++ < n)
+		*dest++ = 0;
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*ptr;
+
+	ptr = malloc(count * size);
+	if (ptr == NULL)
+		return (ptr);
+	ft_bzero(ptr, size * count);
+	return (ptr);
 }
