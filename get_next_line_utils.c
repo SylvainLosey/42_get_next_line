@@ -6,72 +6,84 @@
 /*   By: sylvain <sylvain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 15:32:43 by sylvain           #+#    #+#             */
-/*   Updated: 2022/04/15 16:49:47 by sylvain          ###   ########.fr       */
+/*   Updated: 2022/04/16 18:09:41 by sylvain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 
-size_t	ft_strlen(const char *s)
+size_t	strlen_until_char(const char *s, const char c)
 {
 	size_t	i;
 
 	i = 0;
-	while (s[i])
-		i++;
+	if (c == 0)
+	{
+		while (s[i])
+			i++;
+	} 
+	else
+	{
+		while (s[i] && s[i] != c)
+			i++;
+	}
 	return (i);
 }
-
-size_t	ft_strlen_return(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] && s[i] != '\n')
-		i++;
-	return (i);
-}
-
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*dest;
 	int		i;
+	int		len1;
+	int		len2;
+	char	*str;
 
-	i = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	dest = (char *) malloc(sizeof(*dest) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (dest == NULL)
+	len1 = strlen_until_char(s1, 0);
+	len2 = strlen_until_char(s2, 0);
+	str = (char*)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (str == NULL)
 		return (NULL);
-	while (*s1)
-		dest[i++] = *s1++;
-	while (*s2)
-		dest[i++] = *s2++;
-	dest[i] = '\0';
+	i = -1;
+	while (s1[++i])
+		str[i] = s1[i];
+	i = -1;
+	while (s2[++i])
+	{
+		str[len1] = s2[i];
+		len1++;
+	}
+	str[len1] = '\0';
+	free(s1);
+	return (str);
+}
+
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
+{
+	unsigned int i;
+
+	i = 0;
+	while (src[i] != '\0' && i < n)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+		dest[i++] = '\0';
 	return (dest);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+
+void	*ft_memset(void *b, int c, size_t len)
 {
-	size_t i;
-	size_t src_len;
+	size_t	i;
 
 	i = 0;
-	if (!dst || !src)
-		return (0);
-	src_len = ft_strlen(src);
-	if (!dstsize)
-		return (src_len);
-	while (src[i] != '\0' && i < dstsize)
+	while (i < len)
 	{
-		dst[i] = src[i];
+		*(unsigned char *)(b + i) = (unsigned char)c;
 		i++;
 	}
-	if (dstsize < src_len)
-		dst[dstsize - 1] = '\0';
-	else if (dstsize != 0)
-		dst[i] = '\0';
-	return (src_len);
+	return (b);
 }
