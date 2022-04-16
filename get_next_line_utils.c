@@ -6,7 +6,7 @@
 /*   By: sylvain <sylvain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 15:32:43 by sylvain           #+#    #+#             */
-/*   Updated: 2022/04/16 18:25:57 by sylvain          ###   ########.fr       */
+/*   Updated: 2022/04/16 19:59:00 by sylvain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		len2;
 	char	*str;
 
+	if (!s1)
+		s1 = (char *) ft_calloc(1, 1 * sizeof(char));
 	if (!s1 || !s2)
 		return (NULL);
 	len1 = strlen_until_char(s1, 0);
@@ -49,10 +51,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		str[i] = s1[i];
 	i = -1;
 	while (s2[++i])
-	{
-		str[len1] = s2[i];
-		len1++;
-	}
+		str[len1++] = s2[i];
 	str[len1] = '\0';
 	free(s1);
 	return (str);

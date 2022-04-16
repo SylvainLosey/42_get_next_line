@@ -6,7 +6,7 @@
 /*   By: sylvain <sylvain@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 15:32:45 by sylvain           #+#    #+#             */
-/*   Updated: 2022/04/16 18:58:32 by sylvain          ###   ########.fr       */
+/*   Updated: 2022/04/16 20:01:10 by sylvain          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,39 @@
 char	*get_next_line(int fd)
 {
 	static char	*stash;
-	char		*buffer;
 	char		*result;
 
 	if (fd < 0)
 		return (NULL);
+	stash = get_stash(fd, stash);
 	if (!stash)
-		stash = (char *) ft_calloc(1, BUFFER_SIZE + 4);
-	buffer = (char *) ft_calloc(1, BUFFER_SIZE +4);
+		return (NULL);
+	result = copy_until_return_or_end(stash);
+	stash = remove_until_return(stash);
+	return (result);
+}
+
+char	*get_stash(int fd, char *stash)
+{
+	char	*buffer;
+
+	buffer = ft_calloc(1, (BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
 	while (!contains_char(stash, '\n'))
 	{
 		if (read(fd, buffer, BUFFER_SIZE) <= 0)
 			break ;
 		stash = ft_strjoin(stash, buffer);
-		ft_bzero(buffer, BUFFER_SIZE + 4);
+		ft_bzero(buffer, (BUFFER_SIZE + 1) * sizeof(char));
 	}
 	free(buffer);
-	buffer = NULL;
-	if (strlen_until_char(stash, 0) == 0)
+	if (!stash || strlen_until_char(stash, 0) == 0)
 	{
 		free(stash);
-		stash = NULL;
 		return (NULL);
 	}
-	result = copy_until_return_or_end(stash);
-	stash = remove_until_return(stash);
-	return (result);
+	return (stash);
 }
 
 /*
@@ -89,6 +96,8 @@ char	*remove_until_return(char *source)
 
 bool	contains_char(char *str, char c)
 {
+	if (!str)
+		return (false);
 	while (*str)
 	{
 		if (*str == c)
@@ -98,20 +107,20 @@ bool	contains_char(char *str, char c)
 	return (false);
 }
 
-int	main(void) {
-	char	*result;
-	int		fd;
+// int	main(void) {
+// 	char	*result;
+// 	int		fd;
 
-	fd = open("tests/empty", O_RDONLY);
+// 	fd = open("tests/empty", O_RDONLY);
 
-	result = (char *) malloc(sizeof(char));
-	*result = 'a';
-	while (result)
-	{
-		result = get_next_line(fd);
-		printf("%s", result);
-	}
-	free(result);
-	// getchar();
-	return (0);
-}
+// 	result = (char *) malloc(sizeof(char));
+// 	*result = 'a';
+// 	while (result)
+// 	{
+// 		result = get_next_line(fd);
+// 		printf("%s", result);
+// 	}
+// 	free(result);
+// 	// getchar();
+// 	return (0);
+// }
